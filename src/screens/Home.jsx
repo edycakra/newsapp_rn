@@ -17,7 +17,9 @@ export default function Home({ navigation }) {
         data={CATEGORY}
         keyExtractor={(item) => item}
         renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => navigation.push("Category")}>
+          <TouchableOpacity
+            onPress={() => navigation.push("Category", { category: item })}
+          >
             <View style={styles.item}>
               <Text style={styles.title}>{item}</Text>
             </View>

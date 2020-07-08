@@ -1,19 +1,7 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { WebView } from "react-native-webview";
 
-export default function Detail() {
-  return (
-    <View style={styles.container}>
-      <Text>Detail Screen</Text>
-    </View>
-  );
+export default function WebScreen({ route }) {
+  const { urlWeb } = route.params;
+  return <WebView source={{ uri: urlWeb }} />;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
