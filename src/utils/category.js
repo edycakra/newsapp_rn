@@ -1,0 +1,9 @@
+export const CATEGORY = [
+  "BUSINESS",
+  "ENTERTAINMENT",
+  "GENERAL",
+  "HEALTH",
+  "SCIENCE",
+  "SPORT",
+  "TECHNOLOGY",
+];
