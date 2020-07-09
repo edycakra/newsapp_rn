@@ -8,11 +8,15 @@ import {
   FlatList,
   SafeAreaView,
 } from "react-native";
-import { CATEGORY } from "../utils/category";
+import { CATEGORY } from "../utils/category"; //array of available categories in newsapi
 
 export default function Home({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
+      <View style={{ alignItems: "center" }}>
+        <Text style={styles.app}>NEWS APP</Text>
+        <Text>Choose Category</Text>
+      </View>
       <FlatList
         data={CATEGORY}
         keyExtractor={(item) => item}
@@ -39,7 +43,7 @@ const styles = StyleSheet.create({
   },
   item: {
     backgroundColor: "#000000",
-    paddingVertical: 30,
+    paddingVertical: 20,
     paddingHorizontal: 60,
     marginVertical: 8,
     borderRadius: 10,
@@ -47,6 +51,11 @@ const styles = StyleSheet.create({
   title: {
     color: "#ffff99",
     fontSize: 20,
+    fontWeight: "bold",
+  },
+  app: {
+    color: "#000000",
+    fontSize: 22,
     fontWeight: "bold",
   },
 });

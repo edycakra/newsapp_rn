@@ -1,23 +1,45 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import Constants from "expo-constants";
+
 import {
   StyleSheet,
   Text,
   View,
   FlatList,
   TouchableOpacity,
+  Dimensions,
 } from "react-native";
+import { SearchBar } from "react-native-elements";
 
-import { SOURCES } from "../utils/sources";
-import { countries } from "country-data";
+import { SOURCES } from "../utils/sources"; //importing available sources in newsapi
 
 export default function Category({ navigation, route }) {
   const { category } = route.params;
+  const [sourceList, setSourceList] = useState(SOURCES);
+  const [query, setQuery] = useState(""); //state for searchbar
+
+  const handleSearch = (input) => {
+    const newData = SOURCES.filter((item) => {
+      const textData = input.toUpperCase();
+      const itemData = item.name.toUpperCase();
+      return itemData.indexOf(textData) > -1;
+    });
+    setSourceList(newData);
+    setQuery(input);
+  };
 
   return (
-    <View>
+    <View style={styles.container}>
+      <SearchBar
+        placeholder="Search Source..."
+        onChangeText={handleSearch}
+        lightTheme
+        round
+        value={query}
+      />
       <FlatList
-        data={SOURCES}
-        keyExtractor={(item) => item}
+        data={sourceList}
+        keyExtractor={(item) => item.name}
         renderItem={({ item }) => (
           <TouchableOpacity
             onPress={() =>
@@ -26,9 +48,7 @@ export default function Category({ navigation, route }) {
           >
             <View style={styles.item}>
               <Text style={styles.title}>
-                {`${countries[`${item.toUpperCase()}`].emoji} ${
-                  countries[`${item.toUpperCase()}`].name
-                }`}
+                {item.emoji} {item.name}
               </Text>
             </View>
           </TouchableOpacity>
@@ -39,15 +59,26 @@ export default function Category({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    marginTop: Constants.statusBarHeight,
+    //   alignItems: "center",
+    //   justifyContent: "center",
+  },
   item: {
     backgroundColor: "#000000",
     paddingVertical: 30,
-    paddingHorizontal: 40,
+    width: Dimensions.get("window").width,
     marginVertical: 2,
   },
   title: {
     color: "#ffff99",
     fontSize: 20,
+    fontWeight: "bold",
+  },
+  app: {
+    color: "#000000",
+    fontSize: 22,
     fontWeight: "bold",
   },
 });

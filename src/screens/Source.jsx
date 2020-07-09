@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import Constants from "expo-constants";
+
 import {
   StyleSheet,
   Text,
@@ -10,13 +12,15 @@ import {
 } from "react-native";
 import axios from "axios";
 import Loader from "../components/Loader";
+import { SearchBar } from "react-native-elements";
 
 export default function Category({ navigation, route }) {
   const [loading, setLoading] = useState(false);
   const [news, setNews] = useState([]);
+  const [query, setQuery] = useState(""); //state for searchbar
 
   const { category, source } = route.params;
-  const URL = `http://newsapi.org/v2/top-headlines?country=${source}&category=${category}&apiKey=9314195eaf9a4dd38cf90bd8512fcc99`;
+  const URL = `http://newsapi.org/v2/top-headlines?country=${source.alpha2}&category=${category}&apiKey=9314195eaf9a4dd38cf90bd8512fcc99`;
 
   const heightScreen = Dimensions.get("screen").height - 200;
   const widthScreen = Dimensions.get("window").width;
@@ -35,6 +39,16 @@ export default function Category({ navigation, route }) {
       });
   }, []);
 
+  const handleSearch = (input) => {
+    const newData = news.filter((item) => {
+      const textData = input.toUpperCase();
+      const itemData = item.title.toUpperCase();
+      return itemData.indexOf(textData) > -1;
+    });
+    setNews(newData);
+    setQuery(input);
+  };
+
   return (
     <View style={styles.container}>
       {loading || news.length == 0 ? (
@@ -42,7 +56,14 @@ export default function Category({ navigation, route }) {
           <Loader />
         </View>
       ) : (
-        <View>
+        <View style={styles.container}>
+          <SearchBar
+            placeholder="Search Article..."
+            onChangeText={handleSearch}
+            lightTheme
+            round
+            value={query}
+          />
           <FlatList
             data={news}
             keyExtractor={(item) => item.title}
@@ -68,6 +89,12 @@ export default function Category({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    marginTop: Constants.statusBarHeight,
+    //   alignItems: "center",
+    //   justifyContent: "center",
+  },
   item: {
     backgroundColor: "#000000",
     paddingVertical: 5,

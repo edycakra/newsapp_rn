@@ -1,4 +1,5 @@
-export const SOURCES = [
+const countries = require("country-data").countries; //to convert country code into emoji and name
+const COUNTRYCODES = [
   "ae",
   "ar",
   "at",
@@ -54,3 +55,5 @@ export const SOURCES = [
   "ve",
   "za",
 ];
+
+export const SOURCES = COUNTRYCODES.map((el) => countries[el.toUpperCase()]);
