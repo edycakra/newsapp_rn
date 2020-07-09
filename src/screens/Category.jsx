@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import axios from "axios";
 import Loader from "../components/Loader";
+import Error from "../components/Error";
 import { SearchBar } from "react-native-elements";
 
 export default function Category({ navigation, route }) {
@@ -53,22 +54,9 @@ export default function Category({ navigation, route }) {
   return (
     <View style={styles.container}>
       {loading || sourceList.length == 0 ? (
-        <View>
-          <Loader />
-        </View>
+        <Loader />
       ) : error ? (
-        <View>
-          <Text
-            style={{
-              color: "#000000",
-              fontSize: 22,
-              fontWeight: "bold",
-              textAlign: "center",
-            }}
-          >
-            **something went wrong**
-          </Text>
-        </View>
+        <Error />
       ) : (
         <View style={styles.container}>
           <SearchBar
