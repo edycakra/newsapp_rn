@@ -18,15 +18,12 @@ import { SearchBar } from "react-native-elements";
 export default function Category({ navigation, route }) {
   const [loading, setLoading] = useState(false);
   const [news, setNews] = useState([]);
+  const [error, setError] = useState(false);
   const [query, setQuery] = useState(""); //state for searchbar
   const [filter, setFilter] = useState([]); //to help backspace response when searching
   const [page, setPage] = useState(1);
 
   const { source } = route.params;
-
-  const heightScreen = Dimensions.get("screen").height - 200;
-  const widthScreen = Dimensions.get("window").width;
-
   const fetchNews = (page) => {
     const URL = `https://newsapi.org/v2/everything?sources=${source}&apiKey=9314195eaf9a4dd38cf90bd8512fcc99&page=${page}`;
     setLoading(true);
@@ -37,7 +34,10 @@ export default function Category({ navigation, route }) {
         let concatData = newsArr.concat(data.articles);
         setNews(concatData);
       })
-      .catch(console.log)
+      .catch((error) => {
+        console.log(error);
+        setError(true);
+      })
       .finally(() => {
         setLoading(false);
       });
@@ -63,13 +63,6 @@ export default function Category({ navigation, route }) {
     }
   };
 
-  //infinite scroll: creating separator to show that the handleLoadMore works
-  const renderSeparator = () => {
-    return (
-      <View style={{ height: 2, width: "100%", backgroundColor: "#yellow" }} />
-    );
-  };
-
   //search function
   const handleSearch = (input) => {
     const textData = input.toUpperCase();
@@ -81,11 +74,28 @@ export default function Category({ navigation, route }) {
     setQuery(input);
   };
 
+  //dimension size for better viewing
+  const heightScreen = Dimensions.get("screen").height - 200;
+  const widthScreen = Dimensions.get("window").width;
+
   return (
     <View style={styles.container}>
       {loading || news.length == 0 ? (
         <View>
           <Loader />
+        </View>
+      ) : error ? (
+        <View>
+          <Text
+            style={{
+              color: "#000000",
+              fontSize: 22,
+              fontWeight: "bold",
+              textAlign: "center",
+            }}
+          >
+            **something went wrong**
+          </Text>
         </View>
       ) : (
         <View style={styles.container}>
@@ -116,7 +126,6 @@ export default function Category({ navigation, route }) {
             ListFooterComponent={renderFooter}
             onEndReachedThreshold={0.4}
             onEndReached={handleLoadMore}
-            // ItemSeparatorComponent={renderSeparator}
           />
         </View>
       )}

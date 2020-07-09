@@ -15,6 +15,7 @@ import { SearchBar } from "react-native-elements";
 export default function Category({ navigation, route }) {
   const [loading, setLoading] = useState(false);
   const [sourceList, setSourceList] = useState([]);
+  const [error, setError] = useState(false);
   const [query, setQuery] = useState(""); //state for searchbar
   const [filter, setFilter] = useState([]); //to help backspace response when searching
 
@@ -29,7 +30,10 @@ export default function Category({ navigation, route }) {
         let sourceArr = data.sources;
         setSourceList(sourceArr);
       })
-      .catch(console.log)
+      .catch((error) => {
+        console.log(error);
+        setError(true);
+      })
       .finally(() => {
         setLoading(false);
       });
@@ -51,6 +55,19 @@ export default function Category({ navigation, route }) {
       {loading || sourceList.length == 0 ? (
         <View>
           <Loader />
+        </View>
+      ) : error ? (
+        <View>
+          <Text
+            style={{
+              color: "#000000",
+              fontSize: 22,
+              fontWeight: "bold",
+              textAlign: "center",
+            }}
+          >
+            **something went wrong**
+          </Text>
         </View>
       ) : (
         <View style={styles.container}>
