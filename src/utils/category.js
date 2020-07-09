@@ -5,6 +5,6 @@ export const CATEGORY = [
   "GENERAL",
   "HEALTH",
   "SCIENCE",
-  "SPORT",
+  "SPORTS",
   "TECHNOLOGY",
 ];

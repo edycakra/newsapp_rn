@@ -18,9 +18,10 @@ export default function Category({ navigation, route }) {
   const [loading, setLoading] = useState(false);
   const [news, setNews] = useState([]);
   const [query, setQuery] = useState(""); //state for searchbar
+  const [filter, setFilter] = useState([]); //to help backspace response when searching
 
-  const { category, source } = route.params;
-  const URL = `http://newsapi.org/v2/top-headlines?country=${source.alpha2}&category=${category}&apiKey=9314195eaf9a4dd38cf90bd8512fcc99`;
+  const { source } = route.params;
+  const URL = `https://newsapi.org/v2/everything?sources=${source}&apiKey=9314195eaf9a4dd38cf90bd8512fcc99`;
 
   const heightScreen = Dimensions.get("screen").height - 200;
   const widthScreen = Dimensions.get("window").width;
@@ -40,12 +41,12 @@ export default function Category({ navigation, route }) {
   }, []);
 
   const handleSearch = (input) => {
+    const textData = input.toUpperCase();
     const newData = news.filter((item) => {
-      const textData = input.toUpperCase();
       const itemData = item.title.toUpperCase();
       return itemData.indexOf(textData) > -1;
     });
-    setNews(newData);
+    setFilter(newData);
     setQuery(input);
   };
 
@@ -65,8 +66,8 @@ export default function Category({ navigation, route }) {
             value={query}
           />
           <FlatList
-            data={news}
-            keyExtractor={(item) => item.title}
+            data={filter.length ? filter : news}
+            keyExtractor={(item, index) => String(index)}
             renderItem={({ item }) => (
               <TouchableOpacity
                 onPress={() => navigation.push("Detail", { urlWeb: item.url })}

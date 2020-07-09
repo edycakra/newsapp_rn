@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Constants from "expo-constants";
-
 import {
   StyleSheet,
   Text,
@@ -9,52 +8,77 @@ import {
   TouchableOpacity,
   Dimensions,
 } from "react-native";
+import axios from "axios";
+import Loader from "../components/Loader";
 import { SearchBar } from "react-native-elements";
 
-import { SOURCES } from "../utils/sources"; //importing available sources in newsapi
-
 export default function Category({ navigation, route }) {
-  const { category } = route.params;
-  const [sourceList, setSourceList] = useState(SOURCES);
+  const [loading, setLoading] = useState(false);
+  const [sourceList, setSourceList] = useState([]);
   const [query, setQuery] = useState(""); //state for searchbar
+  const [filter, setFilter] = useState([]); //to help backspace response when searching
+
+  const { category } = route.params;
+  const URL = `https://newsapi.org/v2/sources?category=${category}&language=en&apiKey=9314195eaf9a4dd38cf90bd8512fcc99`;
+
+  useEffect(() => {
+    setLoading(true);
+    axios
+      .get(URL)
+      .then(({ data }) => {
+        let sourceArr = data.sources;
+        setSourceList(sourceArr);
+      })
+      .catch(console.log)
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
 
   //function to filter search by query input
   const handleSearch = (input) => {
-    const newData = SOURCES.filter((item) => {
+    const newData = sourceList.filter((item) => {
       const textData = input.toUpperCase();
       const itemData = item.name.toUpperCase();
       return itemData.indexOf(textData) > -1;
     });
-    setSourceList(newData);
+    setFilter(newData);
     setQuery(input);
   };
 
   return (
     <View style={styles.container}>
-      <SearchBar
-        placeholder="Search Source..."
-        onChangeText={handleSearch}
-        lightTheme
-        round
-        value={query}
-      />
-      <FlatList
-        data={sourceList}
-        keyExtractor={(item) => item.name}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            onPress={() =>
-              navigation.push("Source", { category, source: item })
-            }
-          >
-            <View style={styles.item}>
-              <Text style={styles.title}>
-                {item.emoji} {item.name}
-              </Text>
-            </View>
-          </TouchableOpacity>
-        )}
-      />
+      {loading || sourceList.length == 0 ? (
+        <View>
+          <Loader />
+        </View>
+      ) : (
+        <View style={styles.container}>
+          <SearchBar
+            placeholder="Search Source..."
+            onChangeText={handleSearch}
+            lightTheme
+            round
+            value={query}
+          />
+          <FlatList
+            data={filter.length ? filter : sourceList}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.push("Source", { category, source: item.id })
+                }
+              >
+                <View style={styles.item}>
+                  <Text style={styles.title}>{item.name}</Text>
+                  <Text style={{ color: "white" }}>{item.description}</Text>
+                </View>
+              </TouchableOpacity>
+            )}
+          />
+        </View>
+      )}
     </View>
   );
 }

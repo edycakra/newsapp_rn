@@ -1,4 +1,4 @@
-//array of news sources available in newsapi
+//PURPOSE: TO EXPLORE MORE ABOUT NEWSAPI.ORG
 
 const countries = require("country-data").countries; //to convert country code into emoji and name
 const COUNTRYCODES = [
