@@ -1,3 +1,5 @@
+//array of news sources available in newsapi
+
 const countries = require("country-data").countries; //to convert country code into emoji and name
 const COUNTRYCODES = [
   "ae",

@@ -92,14 +92,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: Constants.statusBarHeight,
-    //   alignItems: "center",
-    //   justifyContent: "center",
   },
   item: {
     backgroundColor: "#000000",
     paddingVertical: 5,
     paddingHorizontal: 5,
-    // marginVertical: 2,
     borderWidth: 2,
     borderColor: "#20232a",
   },

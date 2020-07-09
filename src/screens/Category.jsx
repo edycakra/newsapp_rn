@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Constants from "expo-constants";
 
 import {
@@ -18,6 +18,7 @@ export default function Category({ navigation, route }) {
   const [sourceList, setSourceList] = useState(SOURCES);
   const [query, setQuery] = useState(""); //state for searchbar
 
+  //function to filter search by query input
   const handleSearch = (input) => {
     const newData = SOURCES.filter((item) => {
       const textData = input.toUpperCase();
@@ -62,8 +63,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: Constants.statusBarHeight,
-    //   alignItems: "center",
-    //   justifyContent: "center",
   },
   item: {
     backgroundColor: "#000000",

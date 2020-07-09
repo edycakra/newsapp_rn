@@ -1,5 +1,4 @@
 import React from "react";
-import { YellowBox } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
@@ -9,7 +8,6 @@ import Category from "./src/screens/Category";
 import Source from "./src/screens/Source";
 import Detail from "./src/screens/Detail";
 
-//stacknavigator
 const Stack = createStackNavigator();
 console.disableYellowBox = true;
 

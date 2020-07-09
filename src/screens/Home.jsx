@@ -1,5 +1,5 @@
-import Constants from "expo-constants";
 import React from "react";
+import Constants from "expo-constants";
 import {
   StyleSheet,
   Text,
